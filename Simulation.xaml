@@ -1,0 +1,49 @@
+﻿<Window x:Class="A_Level_Computer_Science_NEA.Simulation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Control Panel" Height="1080" Width="1920" Background="#303030">
+
+	<Viewbox Stretch="Uniform">
+		<Grid Width="1920" Height="1080" Background="#303030">
+
+			<!-- Title Block -->
+			<TextBlock Text="Control Panel" Foreground="White" FontFamily="Trebuchet MS" FontSize="80" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+
+			<!-- Reactor Status Panel -->
+			<StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,200,0,0">
+				<!-- Text Display Fields -->
+				<TextBlock x:Name="txtCoolantTemperature" Text="Coolant Temperature: " Foreground="White" FontSize="24" Margin="0,5"/>
+				<TextBlock x:Name="txtFuelLevel" Text="Fuel Level: " Foreground="White" FontSize="24" Margin="0,5"/>
+				<TextBlock x:Name="txtShutdownStatus" Text="Reactor Status: " Foreground="White" FontSize="24" Margin="0,5"/>
+				<TextBlock x:Name="txtPowerOutput" Text="Power Output: " Foreground="White" FontSize="24" Margin="0,5"/>
+				<TextBlock x:Name="txtCoreTemperature" Text="Core Temperature: " Foreground="White" FontSize="24" Margin="0,5"/>
+				<TextBlock x:Name="txtReactorPressure" Text="Reactor Pressure: " Foreground="White" FontSize="24" Margin="0,5"/>
+				<TextBlock x:Name="txtReactivity" Text="Reactivity: " Foreground="White" FontSize="24" Margin="0,5"/>
+				<TextBlock x:Name="txtRodInsertionLevel" Text="Rod Insertion: 50%" Foreground="White" FontSize="24" Margin="0,5"/>
+			</StackPanel>
+
+			<!-- Control Buttons -->
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,600,0,0">
+				<Button x:Name="btnStartReactor" Content="Start Reactor" Width="120" Height="50" Background="#008CBA" Foreground="White" FontSize="18" Click="startReactorClick" Margin="0,0,10,0" Padding="10"/>
+				<Button x:Name="btnShutdown" Content="Shutdown" Width="120" Height="50" Background="#FF6347" Foreground="White" FontSize="18" Click="shutdownClick" Margin="0,0,10,0" Padding="10"/>
+				<Button x:Name="btnRefuel" Content="Refuel" Width="120" Height="50" Background="#32CD32" Foreground="White" FontSize="18" Click="refuelClick" Padding="10"/>
+				<CheckBox x:Name="aiCheckbox" Content="AI Control" Width="120" Height="50" Background="#32CD32" Foreground="White" FontSize="18" Padding="10"/>
+			</StackPanel>
+
+			<!-- Rod Control Section -->
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="400,600,0,0">
+				<Button Content="Raise Rods" Width="120" Height="50" Background="#4CAF50" Foreground="White" FontSize="18" Click="increaseRodInsertion" Margin="0,0,10,0" Padding="10"/>
+				<Button Content="Lower Rods" Width="120" Height="50" Background="#FF4500" Foreground="White" FontSize="18" Click="decreaseRodInsertion" Padding="10"/>
+			</StackPanel>
+
+			<!-- Sliders -->
+			<StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,800,0,0">
+				<TextBlock Text="Coolant Flow Rate" Foreground="White" FontSize="20" Margin="0,5"/>
+				<Slider x:Name="sldCoolantFlowRate" Minimum="1" Maximum="10" Value="5" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0"/>
+				<TextBlock Text="Rod Insertion Increment" Foreground="White" FontSize="20" Margin="0,20,0,5"/>
+				<Slider x:Name="rodInsertionSlider" Minimum="0.01" Maximum="0.2" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0"/>
+			</StackPanel>
+
+		</Grid>
+	</Viewbox>
+</Window>

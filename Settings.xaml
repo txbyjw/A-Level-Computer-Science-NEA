@@ -1,0 +1,20 @@
+﻿<Window x:Class="A_Level_Computer_Science_NEA.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings" Height="300" Width="400">
+	<Grid>
+		<Label Content="Resolution:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,20,0,0"/>
+		<ComboBox x:Name="resolutionOption" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="120,20,0,0">
+			<ComboBoxItem Content="2560x1440"/>
+			<ComboBoxItem Content="1920x1080"/>
+			<ComboBoxItem Content="1366x768"/>
+			<ComboBoxItem Content="1280x1024"/>
+			<ComboBoxItem Content="1440x900"/>
+			<ComboBoxItem Content="1600x900"/>
+			<ComboBoxItem Content="1680x1050"/>
+			<ComboBoxItem Content="1280x800"/>
+			<ComboBoxItem Content="1024x768"/>
+		</ComboBox>
+		<Button Content="Apply Resolution" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="120,60,0,0" Click="applyResolution"/>
+	</Grid>
+</Window>

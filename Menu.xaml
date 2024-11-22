@@ -1,0 +1,32 @@
+﻿<Window x:Class="A_Level_Computer_Science_NEA.Menu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Pressurised Water Reactor Simulator" Height="1080" Width="1920" Background="#404040">
+	<Grid>
+		<!-- Title -->
+		<TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" FontWeight="Bold" FontSize="80" FontFamily="Trebuchet MS" Foreground="#FFFFFF" Background="#707070" Padding="10" Text="Pressurised Water Reactor Simulator"/>
+
+		<!-- Scenario Arrows -->
+		<Button HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="60" Background="#707070" Margin="650, 450, 0, 0" Click="previousScenario">
+			<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">&lt;</TextBlock>
+		</Button>
+
+		<TextBlock Name="scenarioSelector" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" Background="#707070" Margin="10,0" >Scenario Name</TextBlock>
+
+		<Button HorizontalAlignment="Right" VerticalAlignment="Center" Width="60" Height="60" Background="#707070" Margin="0, 450, 650, 0" Click="nextScenario">
+			<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">&gt;</TextBlock>
+		</Button>
+
+		<!-- Scenario Description -->
+		<TextBlock Name="scenarioDescription" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,150" FontSize="40" FontFamily="Trebuchet MS" Foreground="#FFFFFF" Background="#707070" Padding="10" TextWrapping="Wrap">Scenario description goes here.</TextBlock>
+
+		<!-- Buttons -->
+		<Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,150" Width="500" Height="75" Background="#5CED73" Click="beginSimulation">
+			<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">Begin Simulation</TextBlock>
+		</Button>
+
+		<Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,50" Width="500" Height="75" Background="#707070" Click="openSettings">
+			<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">Settings</TextBlock>
+		</Button>
+	</Grid>
+</Window>
