@@ -4,29 +4,53 @@
         Title="Pressurised Water Reactor Simulator" Height="1080" Width="1920" Background="#404040">
 	<Grid>
 		<!-- Title -->
-		<TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" FontWeight="Bold" FontSize="80" FontFamily="Trebuchet MS" Foreground="#FFFFFF" Background="#707070" Padding="10" Text="Pressurised Water Reactor Simulator"/>
+		<Border Background="#707070" CornerRadius="15" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" Padding="20">
+			<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="80" FontFamily="Trebuchet MS" Foreground="#FFFFFF" Text="Pressurised Water Reactor Simulator"/>
+		</Border>
 
-		<!-- Scenario Arrows -->
-		<Button HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="60" Background="#707070" Margin="650, 450, 0, 0" Click="previousScenario">
-			<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">&lt;</TextBlock>
-		</Button>
+		<!-- Scenario Arrow (left) -->
+		<Border Background="#707070" CornerRadius="15" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="450, 220, 0, 0">
+			<Button Width="60" Height="60" Background="Transparent" Click="previousScenario" BorderBrush="Transparent">
+				<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">&lt;</TextBlock>
+			</Button>
+		</Border>
 
-		<TextBlock Name="scenarioSelector" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" Background="#707070" Margin="10,0" >Scenario Name</TextBlock>
+		<!-- Scenario Selector -->
+		<Border Background="#707070" CornerRadius="15" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,220,0,0" Width="750" Height="75">
+			<TextBlock Name="scenarioSelector" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" Padding="20" Text="Scenario 1"/>
+		</Border>
 
-		<Button HorizontalAlignment="Right" VerticalAlignment="Center" Width="60" Height="60" Background="#707070" Margin="0, 450, 650, 0" Click="nextScenario">
-			<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">&gt;</TextBlock>
-		</Button>
+		<!-- Scenario Arrow (right) -->
+		<Border Background="#707070" CornerRadius="15" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0, 220, 450, 0">
+			<Button Width="60" Height="60" Background="Transparent" Click="nextScenario" BorderBrush="Transparent">
+				<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">&gt;</TextBlock>
+			</Button>
+		</Border>
 
 		<!-- Scenario Description -->
-		<TextBlock Name="scenarioDescription" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,150" FontSize="40" FontFamily="Trebuchet MS" Foreground="#FFFFFF" Background="#707070" Padding="10" TextWrapping="Wrap">Scenario description goes here.</TextBlock>
+		<Border Background="#707070" CornerRadius="15" Width="1000" Height="250" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,350,0,0">
+			<TextBlock Name="scenarioDescription" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="40" FontFamily="Trebuchet MS" Foreground="#FFFFFF" Padding="10" Text="Description for Scenario 1"/>
+		</Border>
 
-		<!-- Buttons -->
-		<Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,150" Width="500" Height="75" Background="#5CED73" Click="beginSimulation">
-			<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">Begin Simulation</TextBlock>
-		</Button>
+		<!-- Begin Simulation Button -->
+		<Border Background="#5CED73" CornerRadius="15" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,150" Width="500" Height="75">
+			<Button Background="Transparent" Click="beginSimulation" BorderBrush="Transparent">
+				<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">Begin Simulation</TextBlock>
+			</Button>
+		</Border>
 
-		<Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,50" Width="500" Height="75" Background="#707070" Click="openSettings">
-			<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">Settings</TextBlock>
-		</Button>
+		<!-- Settings Button -->
+		<Border Background="#707070" CornerRadius="15" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,50" Width="500" Height="75">
+			<Button Background="Transparent" Click="openSettings" BorderBrush="Transparent">
+				<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">Settings</TextBlock>
+			</Button>
+		</Border>
+
+		<!-- Quit Button -->
+		<Border Background="#D44C4C" CornerRadius="15" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,50,50" Width="200" Height="75">
+			<Button Background="Transparent" Click="quit" BorderBrush="Transparent">
+				<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Trebuchet MS" Foreground="#FFFFFF" FontWeight="Bold">Quit</TextBlock>
+			</Button>
+		</Border>
 	</Grid>
 </Window>

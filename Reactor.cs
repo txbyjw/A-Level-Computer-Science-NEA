@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 
 namespace A_Level_Computer_Science_NEA
 {
@@ -22,9 +23,9 @@ namespace A_Level_Computer_Science_NEA
                 turbine = new turbine();
                 control = new controlSystem(core, cooling, fuel, steamGen, turbine);
             }
-            
             catch (Exception ex)
             {
+                MessageBox.Show($"Error initialising components: {ex.Message}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Console.WriteLine("Error initialising the following components: " + ex.Message);
             }
         }
@@ -34,13 +35,14 @@ namespace A_Level_Computer_Science_NEA
             if (control.isShutdown)
             {
                 Console.WriteLine("The reactor is shut down.");
+                MessageBox.Show($"Cannot perform this action when the reactor is shutdown.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
             double reactivityAdjustment = control.core.neutronFlux * 0.1;
             control.core.adjustRods(-reactivityAdjustment);
 
-            double newCoreTemperature = calculateCoreTemperature(core.neutronFlux, fuel.fuelLevel, cooling.coolantTemperature);
+            double newCoreTemperature = calculateCoreTemperature(core.neutronFlux, fuel.fuelLevel, cooling.coolantTemperature, core.rodInsertion);
             core.updateCoreTemperature(newCoreTemperature);
 
             double newCoolantTemperature = calculateCoolantTemperature(control.core.neutronFlux, cooling.coolantFlowRate);
@@ -53,12 +55,14 @@ namespace A_Level_Computer_Science_NEA
             Console.WriteLine($"Neutron Flux: {control.core.neutronFlux}, Coolant Temperature: {cooling.coolantTemperature}, Power Output: {turbine.powerOutput}");
         }
 
-        private double calculateCoreTemperature(double neutronFlux, double fuelLevel, double coolantTemperature)
+        private double calculateCoreTemperature(double neutronFlux, double fuelLevel, double coolantTemperature, double rodInsertion)
         {
-            double startTemperature = 280.0; // just a random starting value this will be changed per scenario anyway
-            double temperatureIncrease = neutronFlux * 5;
+            double fluxEffect = neutronFlux * 5;
             double fuelEffect = (fuelLevel / 100) * 50;
-            double temp = startTemperature + temperatureIncrease + fuelEffect - (coolantTemperature * 0.1);
+            double coolantEffect = coolantTemperature * 0.1;
+            double rodEffect = (1 - rodInsertion) * 10;
+
+            double temp = core.coreTemperature + fluxEffect + fuelEffect - coolantEffect - rodEffect;
             return Math.Clamp(temp, 0, 350);
         }
 
@@ -77,7 +81,6 @@ namespace A_Level_Computer_Science_NEA
         public double reactivity { get; private set; }
         public double rodInsertion { get; private set; } = 0.5;
         public double rodIncrement { get; set; }
-        public bool aiControl { get; set; }
 
         private const double maxNeutronFlux = 100.0;
 
@@ -91,18 +94,6 @@ namespace A_Level_Computer_Science_NEA
         public void adjustRods(double positionChange)
         {
             rodInsertion = Math.Clamp(rodInsertion + positionChange, 0, 1);
-
-            if (aiControl)
-            {
-                if (neutronFlux > 75)
-                {
-                    rodInsertion = Math.Clamp(rodInsertion + rodIncrement, 0, 1);
-                }
-                else if (neutronFlux < 30)
-                {
-                    rodInsertion = Math.Clamp(rodInsertion - rodIncrement, 0, 1);
-                }
-            }
 
             if (rodInsertion < 0.5)
             {
@@ -127,7 +118,6 @@ namespace A_Level_Computer_Science_NEA
         public double coolantTemperature { get; private set; }
         public double coolantPressure { get; private set; }
         public double coolantFlowRate { get; set; }
-        public bool aiControl { get; set; }
 
         private const double maxTemperature = 350.0;
         private const double minFlowRate = 0.0;
@@ -160,7 +150,6 @@ namespace A_Level_Computer_Science_NEA
     public class fuelSystem
     {
         public double fuelLevel { get; private set; }
-        public bool aiControl { get; set; }
 
         private const double depletionRate = 0.01;
 
@@ -181,18 +170,7 @@ namespace A_Level_Computer_Science_NEA
 
         public void refuel()
         {
-            if (!aiControl)
-            {
-                fuelLevel = 100.0;
-            }
-
-            else
-            {
-                if (fuelLevel < 15)
-                {
-                    fuelLevel = 100.0;
-                }
-            }
+            fuelLevel = 100.0;
         }
     }
 
@@ -200,7 +178,6 @@ namespace A_Level_Computer_Science_NEA
     {
         public double steamTemperature { get; private set; }
         public double steamPressure { get; private set; }
-        public bool aiControl { get; set; }
 
         private const double maxSteamPressure = 150.0;
 
@@ -214,7 +191,6 @@ namespace A_Level_Computer_Science_NEA
     public class turbine
     {
         public double powerOutput { get; private set; }
-        public bool aiControl { get; set; }
 
         public void generatePower(double steamPressure)
         {
@@ -229,7 +205,6 @@ namespace A_Level_Computer_Science_NEA
     public class controlSystem
     {
         public bool isShutdown { get; private set; }
-        public bool aiControl { get; set; }
 
         public neutronics core { get; private set; }
         private coolingSystem cooling;
@@ -248,10 +223,7 @@ namespace A_Level_Computer_Science_NEA
 
         public void startReactor()
         {
-            if (!aiControl)
-            {
-                isShutdown = false;
-            }
+            isShutdown = false;
         }
 
         public void stopReactor()

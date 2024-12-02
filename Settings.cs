@@ -1,109 +1,144 @@
 ﻿using System;
-using System.Windows;
 using System.IO;
-using System.Xml.Serialization;
+using System.Windows;
+using System.Text.Json;
+using System.Windows.Controls;
+using System.Windows.Automation;
 
 namespace A_Level_Computer_Science_NEA
 {
-    public partial class Settings : Window
+    public class SettingsData // Class to hold application settings, serialisable.
     {
-        // [XmlIgnore] // Ensuring that menu is not serialised, 
-        // private Menu menu;
+        public string resolution { get; set; } = "1920x1080";
+        public bool fullscreen { get; set; } = false;
 
-        public string resolution { get; set; }
-
-        public Settings()
+        public void Save() // Method which saves settings to the json file.
         {
-            InitializeComponent();
-            resolution = "2560x1440";
-            loadSettings();
-        }
 
-        // public Settings(Menu menu) : this()
-        // {
-            // loadSettings();
-            // this.menu = menu;
-        // }
-
-        private void saveSettings()
-        {
-            string filePath = "Settings.xml";
-
-            if (!canWriteToFile(filePath))
-            {
-                return;
-            }
+	    string filePath = "Settings.json";
 
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Settings));
-                using (StreamWriter writer = new StreamWriter(filePath))
-                {
-                    serializer.Serialize(writer, this);
-                }
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string json = JsonSerializer.Serialize(this, options);
+                File.WriteAllText(filePath, json);
             }
-            catch (Exception ex)
+            catch (Exception ex) // Gives the user a warning window popup if the program can't save the settings. More useful for personal debugging.
             {
-                MessageBox.Show($"Error saving settings: {ex.Message}\n{ex.StackTrace}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error saving settings: {ex.Message}\n{ex.StackTrace}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
             }
         }
 
-        private void loadSettings()
+        public static SettingsData Load() // Method to load settings from the json.
         {
-            string filePath = "Settings.xml";
 
-            if (File.Exists(filePath))
+	    string filePath = "Settings.json";
+
+            if (!File.Exists(filePath)) // If the file path doesn't exist, create a new one with default values.
             {
-                try
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(Settings));
-                    using (StreamReader reader = new StreamReader(filePath))
-                    {
-                        Settings loadedSettings = (Settings)serializer.Deserialize(reader);
-                        this.resolution = loadedSettings.resolution;
-                    }
-                }
-                catch (InvalidOperationException ex)
-                {
-                    MessageBox.Show($"Error loading settings: {ex.Message}\n{ex.StackTrace}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+		        MessageBox.Show($"Couldn't locate the settings file. Creating a new file and defaulting values.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                var defaultSettings = new SettingsData();
+                defaultSettings.Save();
+                return defaultSettings;
+            }
+
+            try // Reads the json string and deserialises it into a SettingsData object.
+            {
+                string json = File.ReadAllText(filePath);
+                return JsonSerializer.Deserialize<SettingsData>(json) ?? new SettingsData();
+            }
+            catch (Exception ex) // Similar to last catch, displays an error window if the program can't load the settings.
+            {
+                MessageBox.Show($"Error loading settings: {ex.Message}\n{ex.StackTrace}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return new SettingsData();
+            }
+        }
+    }
+
+    public static class SettingsManager
+    {
+        public static void applySettings(SettingsData settingsData, Menu menu)
+        {
+            ResolutionManager.applyResolution(settingsData.resolution, settingsData.fullscreen, menu);
+
+            if (settingsData.fullscreen)
+            {
+                menu.WindowStyle = WindowStyle.None;
+                menu.ResizeMode = ResizeMode.NoResize;
+                menu.WindowState = WindowState.Maximized;
             }
             else
             {
-                MessageBox.Show("Settings file not found. Creating a new one.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.resolution = "2560x1440";
-                saveSettings();
+                menu.WindowStyle = WindowStyle.SingleBorderWindow;
+                menu.ResizeMode = ResizeMode.CanResize;
+                menu.WindowState = WindowState.Normal;
             }
         }
+    }
 
-        private void applyResolution(object sender, EventArgs e)
+    public partial class Settings : Window // Partial class representing the settings window.
+    {
+        private Menu menu;
+        private SettingsData settingsData;
+
+        public Settings(Menu menu) // Constructor for the settings window.
+        {
+            InitializeComponent();
+            this.menu = menu;
+            this.Topmost = true;
+
+            settingsData = SettingsData.Load();
+            applyLoadedSettings();
+        }
+
+        private void applyLoadedSettings() // Method to update the UI based on applied settings.
+        {
+            ResolutionManager.applyResolution(settingsData.resolution, settingsData.fullscreen, menu);
+
+            foreach (ComboBoxItem item in resolutionOption.Items)
+            {
+                if (item.Content.ToString() == settingsData.resolution)
+                {
+                    resolutionOption.SelectedItem = item;
+                    break;
+                }
+            }
+
+            fullscreenCheckbox.IsChecked = settingsData.fullscreen;
+        }
+
+        private void saveSettings() // Method to save the applied settings to the json file.
+        {
+            settingsData.resolution = (resolutionOption.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "1920x1080";
+            settingsData.fullscreen = fullscreenCheckbox.IsChecked ?? false;
+            settingsData.Save();
+        }
+
+        private void fullscreenChecked(object sender, RoutedEventArgs e) // Event handler to toggle fullscreen.
+        {
+            if (fullscreenCheckbox.IsChecked == true)
+            {
+                menu.WindowStyle = WindowStyle.None;
+                menu.ResizeMode = ResizeMode.NoResize;
+                menu.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                menu.WindowStyle = WindowStyle.SingleBorderWindow;
+                menu.ResizeMode = ResizeMode.CanResize;
+                menu.WindowState = WindowState.Normal;
+            }
+            saveSettings();
+        }
+
+        private void applyResolution(object sender, EventArgs e) // Event handler to handle resolution changes.
         {
             if (resolutionOption.SelectedItem != null)
             {
-                resolution = resolutionOption.SelectedItem.ToString();
-                ResolutionManager.applyResolution(resolution, menu);
+                settingsData.resolution = (resolutionOption.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "1920x1080";
+                ResolutionManager.applyResolution(settingsData.resolution, settingsData.fullscreen, menu);
                 saveSettings();
-            }
-        }
-
-        private bool canWriteToFile(string filePath) // Adding to check that the file can be edited, added originally for debugging an issue I was having but decided to keep for validation.
-        {
-            try
-            {
-                using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
-                {
-                    return true;
-                }
-            }
-            catch (UnauthorizedAccessException) // If the program can't access the "Settings.xml" file, throws this error.
-            {
-                MessageBox.Show("The application does not have permission to write to the file.", "Permission Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Unexpected error checking file permissions: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
             }
         }
     }

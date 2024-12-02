@@ -23,8 +23,8 @@ namespace A_Level_Computer_Science_NEA
 
                 sldCoolantFlowRate.ValueChanged += coolantFlowRateChanged;
                 rodInsertionSlider.ValueChanged += setRodIncrement;
-                aiCheckbox.Checked += aiControlChecked;
-                aiCheckbox.Unchecked += aiControlUnchecked;
+                //aiCheckbox.Checked += aiControlChecked;
+                //aiCheckbox.Unchecked += aiControlUnchecked;
             }
 
             catch (Exception ex)
@@ -80,21 +80,21 @@ namespace A_Level_Computer_Science_NEA
             }
         }
 
-        private void aiControlChecked(object sender, RoutedEventArgs e)
-        {
-            if (reactorSimulation.core != null)
-            {
-                reactorSimulation.core.aiControl = true;
-            }
-        }
+        // private void aiControlChecked(object sender, RoutedEventArgs e)
+        // {
+            // if (reactorSimulation.core != null)
+            // {
+                // reactorSimulation.core.aiControl = true;
+            // }
+        // }
 
-        private void aiControlUnchecked(object sender, RoutedEventArgs e)
-        {
-            if (reactorSimulation.core != null)
-            {
-                reactorSimulation.core.aiControl = false;
-            }
-        }
+        //private void aiControlUnchecked(object sender, RoutedEventArgs e)
+        //{
+            //if (reactorSimulation.core != null)
+            //{
+                //reactorSimulation.core.aiControl = false;
+            //}
+        //}
 
         private void setupTimer()
         {
