@@ -1,7 +1,6 @@
 ﻿using System.Windows;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Controls;
 
 namespace A_Level_Computer_Science_NEA
 {
@@ -56,9 +55,9 @@ namespace A_Level_Computer_Science_NEA
 
         private void beginSimulation(object sender, RoutedEventArgs e)
         {
-            Simulation mainWindow = new Simulation();
-            mainWindow.Show();
-            this.Close();
+            // Simulation mainWindow = new Simulation();
+            // mainWindow.Show();
+            // this.Close();
         }
 
         private void openSettings(object sender, RoutedEventArgs e)
